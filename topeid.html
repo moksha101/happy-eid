@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منشئ كارت عيد الأضحى المبارك</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .controls {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .controls h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .control-group {
+            margin-bottom: 25px;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #34495e;
+            font-size: 1.1rem;
+        }
+
+        .control-group input,
+        .control-group select,
+        .control-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Cairo', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .control-group input:focus,
+        .control-group select:focus,
+        .control-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .control-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .image-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .image-option {
+            position: relative;
+            cursor: pointer;
+            border: 3px solid transparent;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .image-option:hover {
+            transform: scale(1.05);
+        }
+
+        .image-option.selected {
+            border-color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .image-option img {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 7px;
+        }
+
+        .card-preview {
+            position: sticky;
+            top: 20px;
+        }
+
+        .greeting-card {
+            width: 100%;
+            max-width: 500px;
+            aspect-ratio: 4/3;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            transform: perspective(1000px) rotateY(-5deg);
+            transition: all 0.5s ease;
+        }
+
+        .card-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.9;
+        }
+
+        .card-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(106, 90, 205, 0.8), rgba(255, 182, 193, 0.6));
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .card-title {
+            font-family: 'Amiri', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .card-name {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .card-message {
+            font-size: 1.2rem;
+            color: #fff;
+            line-height: 1.6;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .decorative-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .moon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .star {
+            position: absolute;
+            background: #fff;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            animation: twinkle 2s ease-in-out infinite alternate;
+        }
+
+        .star:nth-child(1) { top: 15%; left: 15%; width: 12px; height: 12px; animation-delay: 0s; }
+        .star:nth-child(2) { top: 25%; left: 85%; width: 8px; height: 8px; animation-delay: 0.5s; }
+        .star:nth-child(3) { top: 70%; left: 10%; width: 10px; height: 10px; animation-delay: 1s; }
+        .star:nth-child(4) { top: 80%; right: 20%; width: 6px; height: 6px; animation-delay: 1.5s; }
+
+        .download-btn {
+            margin-top: 20px;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.5; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.2); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .card-title {
+                font-size: 2rem;
+            }
+            
+            .card-name {
+                font-size: 1.5rem;
+            }
+            
+            .card-message {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="controls">
+            <h1>🎉 منشئ كارت عيد الأضحى المبارك</h1>
+            
+            <div class="control-group">
+                <label for="recipientName">اسم الشخص:</label>
+                <input type="text" id="recipientName" placeholder="أدخل اسم الشخص المراد تهنئته" value="مثال">
+            </div>
+
+            <div class="control-group">
+                <label>اختر صورة الخلفية:</label>
+                <div class="image-options">
+                    <div class="image-option selected" data-image="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImdyYWQxIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjRkY2QkU3Ii8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjQkI2QkQ5Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkMSkiLz48Y2lyY2xlIGN4PSIxNjAiIGN5PSIzMCIgcj0iMjAiIGZpbGw9IiNGRkQ3MDAiIG9wYWNpdHk9IjAuOCIvPjxwb2x5Z29uIHBvaW50cz0iNTAsNDAgNTUsNTUgNzAsNTUgNTksNjUgNjMsODAgNTAsNzIgMzcsODAgNDEsNjUgMzAsNTUgNDUsNTUiIGZpbGw9IiNGRkYiIG9wYWNpdHk9IjAuNyIvPjwvc3ZnPg==">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImdyYWQxIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjRkY2QkU3Ii8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjQkI2QkQ5Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkMSkiLz48Y2lyY2xlIGN4PSIxNjAiIGN5PSIzMCIgcj0iMjAiIGZpbGw9IiNGRkQ3MDAiIG9wYWNpdHk9IjAuOCIvPjxwb2x5Z29uIHBvaW50cz0iNTAsNDAgNTUsNTUgNzAsNTUgNTksNjUgNjMsODAgNTAsNzIgMzcsODAgNDEsNjUgMzAsNTUgNDUsNTUiIGZpbGw9IiNGRkYiIG9wYWNpdHk9IjAuNyIvPjwvc3ZnPg==" alt="خلفية 1">
+                    </div>
+                    <div class="image-option" data-image="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImdyYWQyIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjNEZBNDlEIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMTkzQTM2Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkMikiLz48cGF0aCBkPSJNOTAsMzAgQzEwNSwzMCAxMjAsNDUgMTIwLDYwIEMxMjAsNzUgMTA1LDkwIDkwLDkwIEM3NSw5MCA2MCw3NSA2MCw2MCBDNjAsNDUgNzUsMzAgOTAsMzAiIGZpbGw9IiNGRkQ3MDAiIG9wYWNpdHk9IjAuOCIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iMTIwIiByPSI4IiBmaWxsPSIjRkZGIiBvcGFjaXR5PSIwLjYiLz48Y2lyY2xlIGN4PSIxNTAiIGN5PSIxMjAiIHI9IjYiIGZpbGw9IiNGRkYiIG9wYWNpdHk9IjAuNiIvPjwvc3ZnPg==">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImdyYWQyIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjNEZBNDlEIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMTkzQTM2Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkMikiLz48cGF0aCBkPSJNOTAsMzAgQzEwNSwzMCAxMjAsNDUgMTIwLDYwIEMxMjAsNzUgMTA1LDkwIDkwLDkwIEM3NSw5MCA2MCw3NSA2MCw2MCBDNjAsNDUgNzUsMzAgOTAsMzAiIGZpbGw9IiNGRkQ3MDAiIG9wYWNpdHk9IjAuOCIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iMTIwIiByPSI4IiBmaWxsPSIjRkZGIiBvcGFjaXR5PSIwLjYiLz48Y2lyY2xlIGN4PSIxNTAiIGN5PSIxMjAiIHI9IjYiIGZpbGw9IiNGRkYiIG9wYWNpdHk9IjAuNiIvPjwvc3ZnPg==" alt="خلفية 2">
+                    </div>
+                    <div class="image-option" data-image="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImdyYWQzIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjRkY5QTlFIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjRkFEMEMxIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkMykiLz48ZWxsaXBzZSBjeD0iNDAiIGN5PSI0MCIgcng9IjE1IiByeT0iMjAiIGZpbGw9IiNGRkQ3MDAiIG9wYWNpdHk9IjAuNyIvPjxwb2x5Z29uIHBvaW50cz0iMTMwLDIwIDEzNSwzNSAxNTAsMzUgMTM5LDQ1IDE0Myw2MCAzMCw1MiAxMTcsNjAgMTIxLDQ1IDExMCwzNSAxMjUsMzUiIGZpbGw9IiNGRkYiIG9wYWNpdHk9IjAuOCIvPjxjaXJjbGUgY3g9IjE3MCIgY3k9IjEwMCIgcj0iMTAiIGZpbGw9IiNGRkQ3MDAiIG9wYWNpdHk9IjAuNiIvPjwvc3ZnPg==">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImdyYWQzIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjRkY5QTlFIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjRkFEMEMxIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkMykiLz48ZWxsaXBzZSBjeD0iNDAiIGN5PSI0MCIgcng9IjE1IiByeT0iMjAiIGZpbGw9IiNGRkQ3MDAiIG9wYWNpdHk9IjAuNyIvPjxwb2x5Z29uIHBvaW50cz0iMTMwLDIwIDEzNSwzNSAxNTAsMzUgMTM5LDQ1IDE0Myw2MCAzMCw1MiAxMTcsNjAgMTIxLDQ1IDExMCwzNSAxMjUsMzUiIGZpbGw9IiNGRkYiIG9wYWNpdHk9IjAuOCIvPjxjaXJjbGUgY3g9IjE3MCIgY3k9IjEwMCIgcj0iMTAiIGZpbGw9IiNGRkQ3MDAiIG9wYWNpdHk9IjAuNiIvPjwvc3ZnPg==" alt="خلفية 3">
+                    </div>
+                    <div class="image-option" data-image="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImdyYWQ0IiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjNjY3RUVBIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjNzY0QkEyIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkNCkiLz48Y2lyY2xlIGN4PSIxNTAiIGN5PSI0MCIgcj0iMjUiIGZpbGw9IiNGRkQ3MDAiIG9wYWNpdHk9IjAuOSIvPjxwYXRoIGQ9Ik0zMCw4MCBMNDAsNjAgTDUwLDgwIUw2MCw2MCBMNzAsODAiIHN0cm9rZT0iI0ZGRiIgc3Ryb2tlLXdpZHRoPSIzIiBmaWxsPSJub25lIiBvcGFjaXR5PSIwLjciLz48Y2lyY2xlIGN4PSIzMCIgY3k9IjMwIiByPSI1IiBmaWxsPSIjRkZGIiBvcGFjaXR5PSIwLjgiLz48Y2lyY2xlIGN4PSIxNzAiIGN5PSIxMjAiIHI9IjciIGZpbGw9IiNGRkYiIG9wYWNpdHk9IjAuOCIvPjwvc3ZnPg==">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImdyYWQ0IiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjNjY3RUVBIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjNzY0QkEyIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkNCkiLz48Y2lyY2xlIGN4PSIxNTAiIGN5PSI0MCIgcj0iMjUiIGZpbGw9IiNGRkQ3MDAiIG9wYWNpdHk9IjAuOSIvPjxwYXRoIGQ9Ik0zMCw4MCBMNDAsNjAgTDUwLDgwIEw2MCw2MCBMNzAsODAiIHN0cm9rZT0iI0ZGRiIgc3Ryb2tlLXdpZHRoPSIzIiBmaWxsPSJub25lIiBvcGFjaXR5PSIwLjciLz48Y2lyY2xlIGN4PSIzMCIgY3k9IjMwIiByPSI1IiBmaWxsPSIjRkZGIiBvcGFjaXR5PSIwLjgiLz48Y2lyY2xlIGN4PSIxNzAiIGN5PSIxMjAiIHI9IjciIGZpbGw9IiNGRkYiIG9wYWNpdHk9IjAuOCIvPjwvc3ZnPg==" alt="خلفية 4">
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="customMessage">رسالة التهنئة:</label>
+                <textarea id="customMessage" placeholder="اكتب رسالة التهنئة الخاصة بك...">عيد أضحى مبارك
+أعاده الله عليك بالخير والبركة</textarea>
+            </div>
+
+            <button class="download-btn" onclick="downloadCard()">📥 تحميل الكارت</button>
+        </div>
+
+        <div class="card-preview">
+            <div class="greeting-card" id="greetingCard">
+                <img class="card-background" id="cardBackground" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImdyYWQxIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjRkY2QkU3Ii8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjQkI2QkQ5Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkMSkiLz48Y2lyY2xlIGN4PSIxNjAiIGN5PSIzMCIgcj0iMjAiIGZpbGw9IiNGRkQ3MDAiIG9wYWNpdHk9IjAuOCIvPjxwb2x5Z29uIHBvaW50cz0iNTAsNDAgNTUsNTUgNzAsNTUgNTksNjUgNjMsODAgNTAsNzIgMzcsODAgNDEsNjUgMzAsNTUgNDUsNTUiIGZpbGw9IiNGRkYiIG9wYWNpdHk9IjAuNyIvPjwvc3ZnPg==" alt="خلفية الكارت">
+                
+                <div class="card-overlay">
+                    <div class="decorative-elements">
+                        <div class="moon"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                    </div>
+                    
+                    <h1 class="card-title">🎉 عيد أضحى مبارك 🎉</h1>
+                    <h2 class="card-name" id="cardName">أحمد</h2>
+                    <p class="card-message" id="cardMessage">عيد أضحى مبارك<br>أعاده الله عليك بالخير والبركة</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // تحديث اسم المستقبل
+        document.getElementById('recipientName').addEventListener('input', function() {
+            const name = this.value || 'الاسم';
+            document.getElementById('cardName').textContent = name;
+        });
+
+        // تحديث رسالة التهنئة
+        document.getElementById('customMessage').addEventListener('input', function() {
+            const message = this.value || 'عيد أضحى مبارك';
+            document.getElementById('cardMessage').innerHTML = message.replace(/\n/g, '<br>');
+        });
+
+        // اختيار الصورة
+        document.querySelectorAll('.image-option').forEach(option => {
+            option.addEventListener('click', function() {
+                // إزالة التحديد من جميع الخيارات
+                document.querySelectorAll('.image-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                // إضافة التحديد للخيار المختار
+                this.classList.add('selected');
+                
+                // تحديث خلفية الكارت
+                const imageData = this.dataset.image;
+                document.getElementById('cardBackground').src = imageData;
+            });
+        });
+
+        // تحميل الكارت كصورة
+        function downloadCard() {
+            const card = document.getElementById('greetingCard');
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // تحديد أبعاد الكانفاس
+            canvas.width = 800;
+            canvas.height = 600;
+            
+            // رسم خلفية متدرجة
+            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            gradient.addColorStop(0, '#f093fb');
+            gradient.addColorStop(1, '#f5576c');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // إضافة عناصر زخرفية
+            // القمر
+            ctx.fillStyle = '#FFD700';
+            ctx.beginPath();
+            ctx.arc(canvas.width - 80, 60, 30, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // النجوم
+            const stars = [
+                {x: 100, y: 80, size: 15},
+                {x: canvas.width - 150, y: 120, size: 10},
+                {x: 80, y: canvas.height - 150, size: 12},
+                {x: canvas.width - 100, y: canvas.height - 100, size: 8}
+            ];
+            
+            stars.forEach(star => {
+                ctx.fillStyle = '#FFFFFF';
+                ctx.save();
+                ctx.translate(star.x, star.y);
+                ctx.beginPath();
+                for (let i = 0; i < 5; i++) {
+                    ctx.lineTo(Math.cos((18 + i * 72) * Math.PI / 180) * star.size, 
+                              Math.sin((18 + i * 72) * Math.PI / 180) * star.size);
+                    ctx.lineTo(Math.cos((54 + i * 72) * Math.PI / 180) * star.size / 2, 
+                              Math.sin((54 + i * 72) * Math.PI / 180) * star.size / 2);
+                }
+                ctx.closePath();
+                ctx.fill();
+                ctx.restore();
+            });
+            
+            // النصوص
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#FFFFFF';
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+            ctx.shadowOffsetX = 2;
+            ctx.shadowOffsetY = 2;
+            ctx.shadowBlur = 4;
+            
+            // العنوان الرئيسي
+            ctx.font = 'bold 48px Arial';
+            ctx.fillText('🎉 عيد أضحى مبارك 🎉', canvas.width / 2, canvas.height / 2 - 60);
+            
+            // الاسم
+            ctx.font = 'bold 36px Arial';
+            const name = document.getElementById('recipientName').value || 'الاسم';
+            ctx.fillText(name, canvas.width / 2, canvas.height / 2 + 20);
+            
+            // الرسالة
+            ctx.font = '24px Arial';
+            const message = document.getElementById('customMessage').value || 'عيد أضحى مبارك';
+            const lines = message.split('\n');
+            lines.forEach((line, index) => {
+                ctx.fillText(line, canvas.width / 2, canvas.height / 2 + 80 + (index * 35));
+            });
+            
+            // تحميل الصورة
+            const link = document.createElement('a');
+            link.download = `عيد_أضحى_مبارك_${name}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+    </script>
+</body>
+</html>
